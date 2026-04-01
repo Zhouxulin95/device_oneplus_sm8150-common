@@ -87,8 +87,7 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_CAMERA_SERVICE_EXT_LIB := //$(VENDOR_PATH):libcameraservice_extension.opsm8150
 
 # FOD
-TARGET_SURFACEFLINGER_UDFPS_LIB := //hardware/oneplus:libudfps_extension.oneplus
-
+$(call soong_config_set,surfaceflinger,udfps_lib,//hardware/oneplus:libudfps_extension.oneplus)
 # Display
 MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
@@ -110,7 +109,7 @@ DEVICE_MANIFEST_FILE += $(VENDOR_PATH)/manifest.xml
 ODM_MANIFEST_FILES += $(VENDOR_PATH)/manifest-qva.xml
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(VENDOR_PATH):libinit_oneplus-sm8150
+$(call soong_config_set,libinit,vendor_init_lib,//$(VENDOR_PATH):libinit_oneplus-sm8150)
 TARGET_RECOVERY_DEVICE_MODULES := libinit_oneplus-sm8150
 
 # Disable sparse on all filesystem images
