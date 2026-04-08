@@ -107,7 +107,8 @@ PRODUCT_COPY_FILES += \
 
 # ANT+
 PRODUCT_PACKAGES += \
-    AntHalService-Soong \
+# TODO(PORT): 移植 PixelOS 时暂时屏蔽，待 Recovery 启动后需补全
+    #AntHalService-Soong \
     com.dsi.ant@1.0.vendor
 
 # YAAP Device Settings
@@ -187,8 +188,8 @@ PRODUCT_PACKAGES_DEBUG += \
 # Bluetooth
 PRODUCT_PACKAGES += \
     liba2dpoffload \
-    libbthost_if \
-    libldacBT_bco \
+#     libbthost_if \
+#     libldacBT_bco \
     android.hardware.bluetooth.audio-impl \
     vendor.qti.hardware.bluetooth_audio@2.0.vendor:32 \
     vendor.qti.hardware.btconfigstore@1.0.vendor:64 \
@@ -203,7 +204,7 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl:64 \
     android.hardware.camera.provider@2.4-service_64 \
     libxml2 \
-    Snap \
+    #Snap \
     libcamera_metadata_shim \
     vendor.oneplus.hardware.camera@1.0.vendor:64 \
     vendor.qti.hardware.camera.device@1.0.vendor:64
@@ -271,8 +272,8 @@ PRODUCT_VENDOR_PROPERTIES += \
 endif
 
 # DRM
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.4-service.clearkey
+# PRODUCT_PACKAGES += \
+#     android.hardware.drm@1.4-service.clearkey
 
 # fastbootd
 PRODUCT_PACKAGES += \
@@ -335,8 +336,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
 
 # KProfiles
-PRODUCT_PACKAGES += \
-    KProfiles
+# PRODUCT_PACKAGES += \
+#     KProfiles
 
 # Lindroid
 TARGET_BUILD_LINDROID := true
@@ -370,13 +371,13 @@ PRODUCT_PACKAGES += \
     libc2dcolorconvert \
     libcodec2_hidl@1.0.vendor \
     libcodec2_vndk.vendor \
-    libmm-omxcore \
-    libOmxAacEnc \
-    libOmxAmrEnc \
+#     libmm-omxcore \
+#     libOmxAacEnc \
+#     libOmxAmrEnc \
     libOmxCore \
-    libOmxEvrcEnc \
-    libOmxG711Enc \
-    libOmxQcelp13Enc \
+#     libOmxEvrcEnc \
+#     libOmxG711Enc \
+#     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
     libOmxVidcCommon \
