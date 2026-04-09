@@ -185,3 +185,4 @@ WPA_SUPPLICANT_VERSION := VER_0_8_X
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
     device/oneplus/sm8150-common/vendor_framework_compatibility_matrix.xml \
     $(VENDOR_PATH)/configs/vintf/oneplus_vendor_framework_compatibility_matrix.xml
+
