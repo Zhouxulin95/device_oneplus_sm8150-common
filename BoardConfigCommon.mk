@@ -36,16 +36,57 @@ TARGET_BOOTLOADER_BOARD_NAME := msmnile
 TARGET_NO_BOOTLOADER := true
 
 # Kernel
+#BOARD_BOOT_HEADER_VERSION := 2
+#BOARD_KERNEL_BASE := 0x00000000
+#BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 androidboot.usbcontroller=a600000.dwc3  kpti=off
+#BOARD_KERNEL_CMDLINE += androidboot.vbmeta.avb_version=1.0 buildvariant=userdebug
+#BOARD_KERNEL_IMAGE_NAME := Image
+#BOARD_KERNEL_PAGESIZE := 4096
+#BOARD_KERNEL_SEPARATED_DTBO := true
+#BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+#BOARD_RAMDISK_USE_LZ4 := true
+#TARGET_KERNEL_ADDITIONAL_FLAGS := LLVM=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
+#TARGET_KERNEL_CLANG_VERSION := r547379
+#TARGET_KERNEL_CONFIG := gulch_defconfig vendor/debugfs.config
+#TARGET_KERNEL_SOURCE := kernel/oneplus/sm8150
+
+# --- Kernel 配置部分 ---
 BOARD_BOOT_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 androidboot.usbcontroller=a600000.dwc3  kpti=off
-BOARD_KERNEL_CMDLINE += androidboot.vbmeta.avb_version=1.0
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=2048 loop.max_part=7 androidboot.usbcontroller=a600000.dwc3 kpti=off
+BOARD_KERNEL_CMDLINE += androidboot.vbmeta.avb_version=1.0 buildvariant=userdebug
 BOARD_KERNEL_IMAGE_NAME := Image
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_SEPARATED_DTBO := true
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_RAMDISK_USE_LZ4 := true
-TARGET_KERNEL_ADDITIONAL_FLAGS := LLVM=1 LD=ld.lld AS=llvm-as AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
+
+# --- 修复核心：强制指定编译器和三元组 ---
+# 1. 显式指定 clang_triple，这是影响编译 ABI 的最关键参数
+# 2. 使用绝对路径指向 wrapper，彻底拦截 Soong 的参数污染
+TARGET_KERNEL_CLANG_TRIPLE := aarch64-linux-gnu-
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-gnu-
+
+# 这里的 TARGET_KERNEL_CC 必须使用绝对路径
+# $(LOCAL_PATH) 通常指向设备树目录
+TARGET_KERNEL_CC := $(shell pwd)/device/oneplus/sm8150-common/clang_wrapper.sh
+
+# 补充 LLVM 编译所需变量，并注入 CC 指向我们的 Wrapper
+TARGET_KERNEL_ADDITIONAL_FLAGS := \
+    LLVM=1 \
+    LLVM_IAS=1 \
+    CLANG_TRIPLE=$(TARGET_KERNEL_CLANG_TRIPLE) \
+    CROSS_COMPILE=$(TARGET_KERNEL_CROSS_COMPILE_PREFIX) \
+    CC=$(TARGET_KERNEL_CC) \
+    LD=ld.lld \
+    AS=llvm-as \
+    AR=llvm-ar \
+    NM=llvm-nm \
+    OBJCOPY=llvm-objcopy \
+    OBJDUMP=llvm-objdump \
+    STRIP=llvm-strip \
+    HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
+
 TARGET_KERNEL_CLANG_VERSION := r547379
 TARGET_KERNEL_CONFIG := gulch_defconfig vendor/debugfs.config
 TARGET_KERNEL_SOURCE := kernel/oneplus/sm8150
