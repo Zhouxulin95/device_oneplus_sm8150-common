@@ -112,8 +112,8 @@ PRODUCT_PACKAGES += \
     com.dsi.ant@1.0.vendor
 
 # YAAP Device Settings
-PRODUCT_PACKAGES += \
-    DeviceSettings
+#PRODUCT_PACKAGES += \
+#    DeviceSettings
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -447,7 +447,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 
 # Touch
 PRODUCT_PACKAGES += \
-    vendor.lineage.touch@1.0-service.oneplus_msmnile
+    vendor.lineage.touch-service.oneplus_msmnile
 
 # tri-state key
 PRODUCT_PACKAGES += \

@@ -129,6 +129,7 @@ TARGET_CAMERA_SERVICE_EXT_LIB := //$(VENDOR_PATH):libcameraservice_extension.ops
 
 # FOD
 $(call soong_config_set,surfaceflinger,udfps_lib,//hardware/oneplus:libudfps_extension.oneplus)
+
 # Display
 MAX_VIRTUAL_DISPLAY_DIMENSION := 4096
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
@@ -196,16 +197,31 @@ SOONG_CONFIG_NAMESPACES += ONEPLUS_MSMNILE_SENSORS
 SOONG_CONFIG_ONEPLUS_MSMNILE_SENSORS := ALS_POS_X ALS_POS_Y
 
 # Verified Boot
-BOARD_AVB_ENABLE := true
-ifneq (user,$(TARGET_BUILD_VARIANT))
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
-else ifneq (,$(wildcard vendor/yaap/signing/keys/releasekey.key))
-BOARD_AVB_ALGORITHM := SHA256_RSA2048
-BOARD_AVB_KEY_PATH := vendor/yaap/signing/keys/releasekey.key
-else
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
-endif
+#BOARD_AVB_ENABLE := true
+#ifneq (user,$(TARGET_BUILD_VARIANT))
+#BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+#else ifneq (,$(wildcard vendor/yaap/signing/keys/releasekey.key))
+#BOARD_AVB_ALGORITHM := SHA256_RSA2048
+#BOARD_AVB_KEY_PATH := vendor/yaap/signing/keys/releasekey.key
+#else
+#BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+#endif
 
+# Verified Boot
+BOARD_AVB_ENABLE := true
+
+ifneq (user,$(TARGET_BUILD_VARIANT))
+    # userdebug / eng：绕过验证，方便调试
+    BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+else
+    # user 版本：使用 AOSP 测试密钥进行签名
+    # AOSP 测试密钥路径（根据你的 Android 源码版本可能略有不同）
+    BOARD_AVB_ALGORITHM := SHA256_RSA2048
+    BOARD_AVB_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
+    # 如果上面路径找不到，尝试：
+    # BOARD_AVB_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+    # BOARD_AVB_ALGORITHM := SHA256_RSA4096
+endif
 
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
@@ -227,3 +243,9 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
     device/oneplus/sm8150-common/vendor_framework_compatibility_matrix.xml \
     $(VENDOR_PATH)/configs/vintf/oneplus_vendor_framework_compatibility_matrix.xml
 
+
+TARGET_BOARD_KERNEL_HEADERS += \
+    device/oneplus/sm8150-common/kernel-headers
+
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
+    device/oneplus/sm8150-common/vintf/compatibility_matrix.xml

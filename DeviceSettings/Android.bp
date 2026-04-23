@@ -15,27 +15,27 @@
 // limitations under the License.
 //
 
-android_app {
-    name: "DeviceSettings",
-
-    srcs: [
-        "src/**/*.java",
-        "src/**/*.kt"
-    ],
-    certificate: "platform",
-    platform_apis: true,
-    system_ext_specific: true,
-    privileged: true,
-
-    libs: ["SystemUIPluginLib"],
-    static_libs: [
-        "org.lineageos.settings.resources",
-    ],
-
-    resource_dirs: ["res"],
-
-    optimize: {
-        proguard_flags_files: ["proguard.flags"],
-    },
-
-}
+//android_app {
+//    name: "DeviceSettings",
+//
+//    srcs: [
+//        "src/**/*.java",
+//        "src/**/*.kt"
+//    ],
+//    certificate: "platform",
+//    platform_apis: true,
+//    system_ext_specific: true,
+//    privileged: true,
+//
+//    libs: ["SystemUIPluginLib"],
+//    static_libs: [
+//        "org.lineageos.settings.resources",
+//    ],
+//
+//    resource_dirs: ["res"],
+//
+//    optimize: {
+//        proguard_flags_files: ["proguard.flags"],
+//    },
+//
+//}
